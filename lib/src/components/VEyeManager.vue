@@ -1,4 +1,14 @@
 <script>
+const toArrayModel = (value) => {
+  if (Array.isArray(value)) {
+    return value
+  } else if (value || value === 0) {
+    return [value]
+  } else {
+    return []
+  }
+}
+
 /**
  * Provides state for scoped <v-eye>, so they can work as group based on
  * provider conditions (props).
@@ -75,14 +85,13 @@ export default {
   computed: {
     $_modelValueProxy: {
       get() {
-        return this.modelValue ? this.modelValue : this.modelValueInternal;
+        return this.modelValue
+          ? toArrayModel(this.modelValue)
+          : toArrayModel(this.modelValueInternal);
       },
       set(newValue) {
         this.syncModelValue(newValue);
       }
-    },
-    $_modelValueProxyIsArray() {
-      return Array.isArray(this.$_modelValueProxy);
     }
   },
 
@@ -122,8 +131,14 @@ export default {
   methods: {
     syncModelValue(newVal) {
       this.modelValueInternal = newVal;
-      this.$emit("change", newVal);
-      this.$emit("update:modelValue", newVal);
+      const emitValue = this.multiple
+        ? newVal
+        : !newVal.length
+        ? null
+        : newVal[newVal.length - 1]
+
+      this.$emit("change", emitValue);
+      this.$emit("update:modelValue", emitValue);
     },
     // execMandatorySideEffects(_isMandatory) {
     //   if (!this.watchMandatory) return;
@@ -171,7 +186,7 @@ export default {
       this.injected = this.injected.filter(curId => uid !== curId);
 
       if (this.getIsActive(uid)) {
-        this.deactivate(uid, true);
+        this.deactivate(uid);
       }
     },
     /**
@@ -180,42 +195,39 @@ export default {
      * @return {Boolean}
      */
     getIsActive(uid) {
-      if (this.$_modelValueProxyIsArray) {
-        return this.$_modelValueProxy.includes(uid);
-      } else {
-        return this.$_modelValueProxy === uid;
-      }
+      return this.$_modelValueProxy.includes(uid);
     },
 
     activate(uid) {
       if (this.multiple) {
-        if (this.$_modelValueProxyIsArray) {
-          this.$_modelValueProxy.push(uid);
-        } else if (this.$_modelValueProxy) {
-          this.$_modelValueProxy = [this.$_modelValueProxy, uid];
-        } else {
-          this.$_modelValueProxy = [uid];
-        }
+        this.$_modelValueProxy = [...this.$_modelValueProxy, uid];
       } else {
-        this.$_modelValueProxy = uid;
+        this.$_modelValueProxy = [uid];
       }
     },
 
-    deactivate(uid, destroyed = false) {
+    deactivate(uid) {
       if (
         this.multiple &&
-        this.$_modelValueProxyIsArray &&
-        (destroyed || !(this.mandatory && this.$_modelValueProxy.length === 1))
+        !(this.mandatory && this.$_modelValueProxy.length === 1)
       ) {
         this.$_modelValueProxy = this.$_modelValueProxy.filter(
           el => el !== uid
         );
-      } else if (destroyed || !this.mandatory) {
-        this.$_modelValueProxy = null;
+      } else if (!this.mandatory) {
+        // if multiple are open, and we were have current multiple-like state, keep it open
+        // and close the other ones. this is inspired by vuetify behaviour, and since they
+        // are the major library out there, i'll trust that it reflects the will of the
+        // majority of devs
+        if (this.$_modelValueProxy.length > 1) {
+          this.$_modelValueProxy = [uid];
+        } else {
+          this.$_modelValueProxy = [];
+        }
       }
     },
     /**
-     * Toggleinjected eye open state depending on current provider "mode"
+     * Toggle injected eye active state depending on current manager "mode"
      * @param {String|Number} uid - each eye identifier
      */
     toggle(uid) {
