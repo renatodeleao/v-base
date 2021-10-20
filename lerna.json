@@ -1,0 +1,9 @@
+{
+  "packages": [
+    "lib",
+    "playground"
+  ],
+  "version": "independent",
+  "npmClient": "yarn",
+  "useWorkspaces": true
+}
