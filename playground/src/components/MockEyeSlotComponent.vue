@@ -2,15 +2,15 @@
   <div class="v-eye">
     <div class="v-eye-header" @click="$emit('header-click')">
       <span>Title {{ title }}</span>
-      <span>{{ isOpen ? '🔼': '🔽' }}</span>
+      <span>{{ isActive ? "🔼" : "🔽" }}</span>
     </div>
-    <div class="v-eye-content" v-show="isOpen">
+    <div class="v-eye-content" v-show="isActive">
       <slot>
-        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec
-        finibus auctor massa, vitae posuere sem tincidunt eget. Duis non
-        vestibulum diam. Pellentesque eleifend interdum mollis. Donec
-        porttitor dui enim. Maecenas a semper sem. Nunc molestie turpis
-        vitae sem auctor, non venenatis velit ultricies.
+        Lorem ipsum dolor sit amet, consectetur adipiscing elit. Donec finibus
+        auctor massa, vitae posuere sem tincidunt eget. Duis non vestibulum
+        diam. Pellentesque eleifend interdum mollis. Donec porttitor dui enim.
+        Maecenas a semper sem. Nunc molestie turpis vitae sem auctor, non
+        venenatis velit ultricies.
       </slot>
     </div>
   </div>
@@ -18,9 +18,9 @@
 
 <script>
 export default {
-  name: 'MockEyeSlotComponent',
-  props: ['isOpen', 'title']
-}
+  name: "MockEyeSlotComponent",
+  props: ["isActive", "title"]
+};
 </script>
 
 <style lang="scss">
@@ -38,7 +38,7 @@ export default {
   justify-content: space-between;
 
   &:hover {
-    background: lightgrey; 
+    background: lightgrey;
     cursor: pointer;
   }
 }
