@@ -58,20 +58,14 @@ export default {
      * one staying open as well. If using internal value, then you don't care as
      * as long as it still works (and it does after click)
      *
-     * @see https://codepen.io/ohsimtabem/pen/zYBXWyo?editable=true&editors=101%3Dhttps%3A%2F%2Fvuetifyjs.com%2F
-     */
-    watchMultiple: {
-      type: Boolean,
-      default: true
-    },
-    /**
      * If mandatory starts at false and the is updated to true and modelValue
      * doesn't have at least one item we make the first item open to ensure that
      * mandatory promise is fulfilled
+     * @see https://codepen.io/ohsimtabem/pen/zYBXWyo?editable=true&editors=101%3Dhttps%3A%2F%2Fvuetifyjs.com%2F
      */
-    watchMandatory: {
+    watchPropsWithModelSideEffects: {
       type: Boolean,
-      default: true
+      default: false
     }
   },
 
@@ -95,30 +89,18 @@ export default {
     }
   },
 
-  // watch: {
-  //   mandatory: "execMandatorySideEffects",
-  //   multiple: "execMultipleSideEffects"
-  // },
+  watch: {
+    mandatory: {
+      immediate: true,
+      handler: "execMandatorySideEffects"
+    },
+    multiple: {
+      immediate: true,
+      handler: "execMultipleSideEffects"
+    }
+  },
 
   created() {
-    // watch.once at the beginning
-    // test for withPropSide-effects here
-    this.unwatchInjected = this.$watch("injected", injectedMembers => {
-      if (this.mandatory && this.watchMandatory) {
-        const first = injectedMembers[0];
-        this.syncModelValue(this.multiple ? [first] : first);
-      }
-      /*else if (
-        this.multiple &&
-        this.watchMultiple &&
-        this.$_modelValueProxy == null
-      ) {
-        this.syncModelValue([])
-      }*/
-
-      this.unwatchInjected();
-    });
-
     if (this.multiple && !Array.isArray(this.modelValue)) {
       console.warn("when using multiple, modelValue/v-model must be an array");
     }
@@ -140,32 +122,22 @@ export default {
       this.$emit("change", emitValue);
       this.$emit("update:modelValue", emitValue);
     },
-    // execMandatorySideEffects(_isMandatory) {
-    //   if (!this.watchMandatory) return;
+    execMandatorySideEffects(isMandatory) {
+      if (!this.watchPropsWithModelSideEffects) return;
 
-    //   // should we do this?
-    //   if (this.multiple && !this.$_modelValueProxy?.length) {
-    //     this.syncModelValue([this.injected[0]]);
-    //   } else if (!this.$_modelValueProxy) {
-    //     this.syncModelValue(this.injected[0]);
-    //   }
-    // },
-    // execMultipleSideEffects(isMultiple) {
-    //   if (!this.watchMultiple) return;
+      if (isMandatory && !this.$_modelValueProxy.length) {
+        this.$_modelValueProxy = [this.injected[0]]
+      }
+    },
+    execMultipleSideEffects(isMultiple) {
+      if (!this.watchPropsWithModelSideEffects) return;
 
-    //   if (isMultiple && this.$_modelValueProxy && !this.$_modelValueProxyIsArray) {
-    //     this.syncModelValue([this.$_modelValueProxy]);
-    //   } else if (isMultiple && !this.$_modelValueProxy) {
-    //     this.syncModelValue([]);
-    //   } else if (!isMultiple && Array.isArray(this.$_modelValueProxy)) {
-    //     if (this.$_modelValueProxy.length === 0) {
-    //       this.syncModelValue(null);
-    //     } else {
-    //       // should we do this ?
-    //       this.syncModelValue(this.$_modelValueProxy[this.$_modelValueProxy.length - 1]);
-    //     }
-    //   }
-    // },
+      if (!isMultiple && this.$_modelValueProxy.length > 1) {
+        this.$_modelValueProxy = this.$_modelValueProxy.slice(-1)
+      } else {
+        this.syncModelValue(this.$_modelValueProxy)
+      }
+    },
 
     // INJECTED API
 

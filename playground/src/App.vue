@@ -18,12 +18,10 @@
       <button class="button" @click="multiple = !multiple">
         toggle multiple
       </button>
-      <button class="button" @click="watchMultiple = !watchMultiple">
-        toggle multiple watch
+      <button class="button" @click="watchPropsWithModelSideEffects = !watchPropsWithModelSideEffects">
+        toggle watchPropsWithModelSideEffects
       </button>
-      <button class="button" @click="watchMandatory = !watchMandatory">
-        toggle mandatory watch
-      </button>
+
       <button class="button" @click="hideEye = !hideEye">
         toggle hideEY
       </button>
@@ -90,8 +88,7 @@
           v-model="modelValue"
           :multiple="multiple"
           :mandatory="mandatory"
-          :watch-multiple="watchMultiple"
-          :watch-mandatory="watchMandatory"
+          :watch-props-with-model-side-effects="watchPropsWithModelSideEffects"
         >
           <div id="group-1">
             <v-eye :uid="1" v-slot:default="{ isActive, toggle }">
@@ -159,8 +156,8 @@ const DEFAULT_STATE = () => ({
   hideEye: false,
   mandatory: defaultProps.mandatory.default,
   multiple: defaultProps.multiple.default,
-  watchMultiple: defaultProps.watchMultiple.default,
-  watchMandatory: defaultProps.watchMandatory.default
+  watchPropsWithModelSideEffects:
+    defaultProps.watchPropsWithModelSideEffects.default
 });
 
 export default {
