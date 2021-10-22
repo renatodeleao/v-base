@@ -9,7 +9,7 @@
           {{ tab }}
         </v-tab>
       </v-tabs>
-      <pre class="playground-codebox">v-model: {{ model }}</code></pre>
+      <pre class="playground-codebox mt-2"><code>v-model: {{ model }}</code></pre>
     </section>
 
     <section class="mb-8">

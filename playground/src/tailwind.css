@@ -13,7 +13,3 @@
 .playground-demo-section__heading {
   @apply font-bold text-white mb-1;
 }
-
-.playground-codebox {
-  @apply rounded-lg bg-black bg-opacity-75 font-mono text-white p-4 text-sm mt-2;
-}
