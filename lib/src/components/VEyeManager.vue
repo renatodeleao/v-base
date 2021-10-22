@@ -116,7 +116,7 @@ export default {
       console.warn("when using multiple, modelValue/v-model must be an array");
     }
 
-    if (this.mandatory && !this.active) {
+    if (this.mandatory && !this.active && !this.modelValueInternal) {
       console.warn("mandatory expects an initial modelValue");
     }
   },
@@ -189,7 +189,7 @@ export default {
       }
     },
 
-    deactivate(uid) {
+    deactivate(uid, destroyed = false) {
       if (
         this.multiple &&
         !(this.mandatory && this.$_modelValueProxy.length === 1)
@@ -197,14 +197,18 @@ export default {
         this.$_modelValueProxy = this.$_modelValueProxy.filter(
           el => el !== uid
         );
-      } else if (!this.mandatory) {
+      } else {
+        if (destroyed && this.mandatory) {
+          this.$_modelValueProxy = this.injected.slice(-1)
+        }
         // if multiple are open, and we were have current multiple-like state, keep it open
         // and close the other ones. this is inspired by vuetify behaviour, and since they
         // are the major library out there, i'll trust that it reflects the will of the
         // majority of devs
+
         if (this.$_modelValueProxy.length > 1) {
           this.$_modelValueProxy = [uid];
-        } else {
+        } else if (!this.mandatory) {
           this.$_modelValueProxy = [];
         }
       }
