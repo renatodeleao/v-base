@@ -107,7 +107,10 @@ export default {
       return h(
         this.as,
         { attrs: { active: this.$_active ? "" : null } },
-        this.$slots.default
+        this.$scopedSlots.default({
+          isActive: this.$_active,
+          toggle: this.toggle
+        })
       );
     }
   },
