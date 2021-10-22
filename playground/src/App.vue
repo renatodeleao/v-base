@@ -147,7 +147,7 @@
 <script>
 import MockEyeSlotComponent from "./components/MockEyeSlotComponent.vue";
 import { VEyeManager, VEye, VEyeSwitch, VEyeContent } from "v-eye";
-
+import { TabsDemo } from './demos'
 const defaultProps = VEyeManager.props;
 
 const DEFAULT_STATE = () => ({
@@ -167,7 +167,8 @@ export default {
     VEye,
     VEyeSwitch,
     VEyeContent,
-    MockEyeSlotComponent
+    MockEyeSlotComponent,
+    TabsDemo
   },
 
   data: DEFAULT_STATE,
