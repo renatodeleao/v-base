@@ -169,7 +169,7 @@ export default {
       this.injected = this.injected.filter(curId => uid !== curId);
 
       if (this.getIsActive(uid)) {
-        this.deactivate(uid);
+        this.deactivate(uid, true);
       }
     },
     /**
