@@ -224,11 +224,11 @@ export default {
     }
   },
 
-  render() {
+  render(h) {
     // mostly because of jest, other wise would be regular slot
     return this.as === "template"
       ? this.$scopedSlots.default({})
-      : this.$slots.default;
+      : h(this.as, this.$slots.default);
   },
 
   provide() {
