@@ -16,7 +16,7 @@ const toArrayModel = (value) => {
 export default {
   name: "VEyeManager",
   model: {
-    prop: "modelValue",
+    prop: "active",
     event: "change"
   },
   props: {
@@ -25,20 +25,31 @@ export default {
       default: "template"
     },
     /**
-     * Currently open eye(s)
+     * The controlled active state of the eyes.
+     * Must be used in conjunction with v-model, manually with @change event
+     * or .sync modifiers,
      */
-    modelValue: {
+    active: {
       type: [String, Array, Number]
     },
     /**
-     * At least one eye must be opem
+     * The active state when initially rendered.
+     * Use when you do not need to control its active state.
+     */
+    defaultActive: {
+      type: [String, Array, Number]
+    },
+    /**
+     * At least one eye must be active all the time
+     * Good for accordions, tabs.
      */
     mandatory: {
       type: Boolean,
       default: false
     },
     /**
-     * 1+n eyes open at the same time
+     * > 1 eyes active at the same time
+     * "Checkbox-or-selectobox-like" groups like filters, tags.
      */
     multiple: {
       type: Boolean,
@@ -72,15 +83,15 @@ export default {
   data() {
     return {
       injected: [],
-      modelValueInternal: this.modelValue
+      modelValueInternal: this.defaultActive
     };
   },
 
   computed: {
     $_modelValueProxy: {
       get() {
-        return this.modelValue
-          ? toArrayModel(this.modelValue)
+        return this.active
+          ? toArrayModel(this.active)
           : toArrayModel(this.modelValueInternal);
       },
       set(newValue) {
@@ -101,11 +112,11 @@ export default {
   },
 
   created() {
-    if (this.multiple && !Array.isArray(this.modelValue)) {
+    if (this.multiple && !Array.isArray(this.active)) {
       console.warn("when using multiple, modelValue/v-model must be an array");
     }
 
-    if (this.mandatory && !this.modelValue) {
+    if (this.mandatory && !this.active) {
       console.warn("mandatory expects an initial modelValue");
     }
   },
