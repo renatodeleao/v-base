@@ -5,18 +5,17 @@
     as="template"
     #default="{ isActive, toggle }"
   >
-    <button
+    <component
+      :is="component"
       class="c-tab"
       :class="isActive && 'c-tab--is-active'"
-      type="button"
-      role="tab"
       :aria-selected="isActive ? 'true' : null"
-      v-bind="$attrs"
+      v-bind="componentAttrs"
       v-on="$listeners"
       @click="toggle"
     >
       <slot />
-    </button>
+    </component>
   </v-eye>
 </template>
 
@@ -32,6 +31,28 @@ export default {
   props: {
     ...restEyeProps,
     selected: active
+  },
+  computed: {
+    component() {
+      if (this.$attrs.to) {
+        return 'router-link'
+      } else if (this.$attrs.href) {
+        return 'a'
+      } else {
+        return 'button'
+      }
+    },
+    componentAttrs() {
+      if (this.component === 'button') {
+        return {
+          type: "button",
+          role: "tab",
+          ...this.$attrs
+        }
+      }
+
+      return this.$attrs
+    }
   }
 };
 </script>
