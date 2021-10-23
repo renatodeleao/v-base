@@ -4,21 +4,17 @@
     watch-props-with-side-effects
     v-bind="$props"
   >
-    <div
-      class="c-disclosure-group"
-      aria-orientation="vertical"
-      v-on="$attrs"
-    >
+    <div class="c-disclosure-group" aria-orientation="vertical" v-on="$attrs">
       <slot />
     </div>
   </v-eye-manager>
 </template>
 
 <script>
-import { VEyeManager } from 'v-eye'
+import { VEyeManager } from "v-eye";
 
 export default {
-  name: 'VDisclosureGroup',
+  name: "VDisclosureGroup",
   components: {
     VEyeManager
   },
@@ -30,14 +26,14 @@ export default {
   computed: {
     modelProxy: {
       get() {
-        return this[VEyeManager.model.prop]
+        return this[VEyeManager.model.prop];
       },
       set(val) {
-        this.$emit(VEyeManager.model.event, val)
+        this.$emit(VEyeManager.model.event, val);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="postcss">

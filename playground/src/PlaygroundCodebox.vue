@@ -4,8 +4,8 @@
 
 <script>
 export default {
-  name: 'PlaygroundCodebox'
-}
+  name: "PlaygroundCodebox"
+};
 </script>
 
 <style lang="postcss">

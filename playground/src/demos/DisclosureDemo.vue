@@ -4,9 +4,7 @@
 
     <section class="mb-8">
       <h2 class="playground-demo-section__heading">Controlled</h2>
-      <playground-codebox class="mb-2">
-        open: {{ model }}
-      </playground-codebox>
+      <playground-codebox class="mb-2"> open: {{ model }} </playground-codebox>
       <button class="button text-white" @click="model = !model">
         External toggle
       </button>
@@ -33,9 +31,11 @@
     </section>
 
     <section class="mb-8">
-      <h2 class="playground-demo-section__title">DisclosureGroup (accordion)</h2>
+      <h2 class="playground-demo-section__title">
+        DisclosureGroup (accordion)
+      </h2>
       <playground-codebox class="mb-2">
-        v-model: {{ groupModel || 'null' }}<br />
+        v-model: {{ groupModel || "null" }}<br />
         props: {{ groupProps }}
       </playground-codebox>
 
@@ -66,13 +66,14 @@
                 :key="'nested-' + panel"
                 :uid="'nested-' + panel"
               >
-                <v-disclosure-summary>Show nested uncontrolled {{ panel }}</v-disclosure-summary>
+                <v-disclosure-summary
+                  >Show nested uncontrolled {{ panel }}</v-disclosure-summary
+                >
                 <v-disclosure-content>
                   {{ loremIpsum }}
                 </v-disclosure-content>
               </v-disclosure>
             </v-disclosure-group>
-
           </v-disclosure-content>
         </v-disclosure>
       </v-disclosure-group>
@@ -87,11 +88,11 @@ import {
   VDisclosureSummary,
   VDisclosureContent,
   VDisclosureGroup
-} from '@/components'
-import PlaygroundCodebox from '@/PlaygroundCodebox'
+} from "@/components";
+import PlaygroundCodebox from "@/PlaygroundCodebox";
 
 export default {
-  name: 'DisclosureDemo',
+  name: "DisclosureDemo",
   components: {
     PlaygroundCodebox,
     VEyeManager,
@@ -108,7 +109,7 @@ export default {
     groupProps: {
       multiple: false,
       mandatory: false,
-      watchPropsWithModelSideEffects: true,
+      watchPropsWithModelSideEffects: true
     },
     showGroupPanel3: true,
     loremIpsum: `
@@ -118,7 +119,7 @@ export default {
       And most times they're friends, like you and me! I should've known
       way back when... You know why, David? Because of the kids. They
       called me Mr Glass.
-    `,
+    `
   }),
   computed: {
     groupControls() {
@@ -126,22 +127,22 @@ export default {
         ...Object.keys(this.groupProps).map(prop => ({
           label: `toggle ${prop}`,
           action: () => {
-            this.groupProps[prop] = !this.groupProps[prop]
+            this.groupProps[prop] = !this.groupProps[prop];
           }
         })),
         {
-          label: 'Conditional render 3',
+          label: "Conditional render 3",
           action: () => {
-            this.showGroupPanel3 = !this.showGroupPanel3
+            this.showGroupPanel3 = !this.showGroupPanel3;
           }
         }
-      ]
+      ];
     },
     visibleGroupPanels() {
       return this.showGroupPanel3
         ? this.groupPanels
-        : this.groupPanels.filter(p => p !== 3)
+        : this.groupPanels.filter(p => p !== 3);
     }
   }
-}
+};
 </script>

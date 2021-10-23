@@ -12,18 +12,18 @@
 </template>
 
 <script>
-import { VEye } from 'v-eye'
-const { active, ...restEyeProps } = VEye.props
+import { VEye } from "v-eye";
+const { active, ...restEyeProps } = VEye.props;
 
 export default {
-  name: 'VDisclosure',
+  name: "VDisclosure",
 
   components: {
     VEye
   },
   model: {
-    prop: 'open',
-    event: 'toggle'
+    prop: "open",
+    event: "toggle"
   },
   props: {
     ...restEyeProps,
@@ -32,15 +32,15 @@ export default {
   computed: {
     modelValueProxy: {
       get() {
-        return this.open
+        return this.open;
       },
       set(value) {
-        this.$emit('toggle', value)
-        this.$emit('update:open', value)
+        this.$emit("toggle", value);
+        this.$emit("update:open", value);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="postcss">

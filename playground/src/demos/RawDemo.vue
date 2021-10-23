@@ -42,16 +42,15 @@
 <script>
 import { VEyeManager, VEye, VEyeSwitch, VEyeContent } from "v-eye";
 
-
 export default {
-  name: 'RawDemo',
+  name: "RawDemo",
   components: {
     VEyeManager,
     VEye,
     VEyeSwitch,
     VEyeContent
-  },
-}
+  }
+};
 </script>
 
 <style lang="postcss">

@@ -9,26 +9,26 @@
       <span class="flex-1">
         <slot v-bind="{ isActive: eye.$_active }" />
       </span>
-      <span class="flex-none">{{ eye.$_active ? '⬆️' : '⬇️' }}</span>
+      <span class="flex-none">{{ eye.$_active ? "⬆️" : "⬇️" }}</span>
     </span>
   </button>
 </template>
 
 <script>
 export default {
-  name: 'VDisclosureSummary',
+  name: "VDisclosureSummary",
   inject: {
     eye: {
       default: null
     }
   }
-}
+};
 </script>
 
 <style lang="postcss">
 .c-disclosure-summary {
   @apply flex flex-nowrap font-semibold text-left bg-white bg-opacity-90 p-3 rounded-lg text-green-900;
-  @apply hover:bg-opacity-100
+  @apply hover:bg-opacity-100;
 }
 
 .c-disclosure-summary--is-active {

@@ -9,13 +9,22 @@
           {{ tab }}
         </v-tab>
       </v-tabs>
-      <pre class="playground-codebox mt-2"><code>v-model: {{ model }}</code></pre>
+      <pre
+        class="playground-codebox mt-2"
+      ><code>v-model: {{ model }}</code></pre>
     </section>
 
     <section class="mb-8">
-      <h2 class="playground-demo-section__heading">Uncontrolled (no v-model, internal state)</h2>
-      <v-tabs :default-selected="tabs[1]">
-        <v-tab v-for="tab in tabs" :key="tab" :uid="tab" @click.native="doSomething">
+      <h2 class="playground-demo-section__heading">
+        Uncontrolled (no v-model, internal state)
+      </h2>
+      <v-tabs :default-selected="tabs[1]" @selected="doSomething">
+        <v-tab
+          v-for="tab in tabs"
+          :key="tab"
+          :uid="tab"
+          @click.native="doSomething"
+        >
           {{ tab }}
         </v-tab>
       </v-tabs>
@@ -59,12 +68,12 @@
 
 <script>
 import { VEyeManager, VEye } from "v-eye";
-import { VTabs, VTab } from '@/components'
+import { VTabs, VTab } from "@/components";
 
-const TABS = ['Recent', 'Popular', 'Trending']
+const TABS = ["Recent", "Popular", "Trending"];
 
 export default {
-  name: 'TabsDemo',
+  name: "TabsDemo",
   components: {
     VEyeManager,
     VEye,
@@ -77,8 +86,8 @@ export default {
   }),
   methods: {
     doSomething() {
-      alert(`If you're using me as menu after page load or something`)
+      alert(`If you're using me as menu after page load or something`);
     }
   }
-}
+};
 </script>

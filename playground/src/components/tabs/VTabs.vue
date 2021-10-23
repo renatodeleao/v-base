@@ -18,11 +18,11 @@
 </template>
 
 <script>
-import { VEyeManager } from 'v-eye'
+import { VEyeManager } from "v-eye";
 
-const { active, defaultActive, ...restEyeManagerProps } = VEyeManager.props
+const { active, defaultActive, ...restEyeManagerProps } = VEyeManager.props;
 export default {
-  name: 'VTabs',
+  name: "VTabs",
   components: {
     VEyeManager
   },
@@ -31,8 +31,8 @@ export default {
    * can be customized to users's existent model patterns
    */
   model: {
-    event: 'selected',
-    prop: 'selected'
+    event: "selected",
+    prop: "selected"
   },
   inheritAttrs: false,
   props: {
@@ -43,14 +43,14 @@ export default {
   computed: {
     modelProxy: {
       get() {
-        return this.selected
+        return this.selected;
       },
       set(val) {
-        this.$emit('selected', val)
+        this.$emit("selected", val);
       }
     }
   }
-}
+};
 </script>
 
 <style lang="postcss">
