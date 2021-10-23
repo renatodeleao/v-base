@@ -77,13 +77,34 @@ export default {
     watchPropsWithModelSideEffects: {
       type: Boolean,
       default: false
+    },
+    /**
+     * Removes all internal or external logic basically making this a
+     * transparent static wrapper.
+     * Still thinking about it because it seems to me that if we don't
+     * want any modeling, than the compositions should conditionally
+     * render me. But that seems more work for now.
+     * @todo think about this
+     */
+    static: {
+      type: Boolean,
+      default: false
     }
   },
 
   data() {
     return {
       injected: [],
-      modelValueInternal: this.defaultActive
+      modelValueInternal: this.defaultActive,
+      // in order for reactive props to stay reactive when provide/injected
+      // because vue will create an observable
+      api: {
+        track: this.track,
+        untrack: this.untrack,
+        getIsActive: this.getIsActive,
+        toggle: this.toggle,
+        static: this.static
+      }
     };
   },
 
@@ -101,6 +122,9 @@ export default {
   },
 
   watch: {
+    static(val) {
+      this.api.static = val
+    },
     mandatory: {
       immediate: true,
       handler: "execMandatorySideEffects"
@@ -237,12 +261,7 @@ export default {
 
   provide() {
     return {
-      manager: {
-        track: this.track,
-        untrack: this.untrack,
-        getIsActive: this.getIsActive,
-        toggle: this.toggle
-      }
+      manager: this.api
     };
   }
 };

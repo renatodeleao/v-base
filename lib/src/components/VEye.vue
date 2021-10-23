@@ -48,7 +48,10 @@ export default {
         : this.uid;
     },
     $_independent() {
-      return !this.manager;
+      return !this.manager || this.manager.static;
+    },
+    $_static() {
+      return !!this.manager?.static
     },
     $_active() {
       if (this.$_independent) {
@@ -86,6 +89,8 @@ export default {
 
   methods: {
     toggle() {
+      if (this.$_static) return
+
       if (this.$_independent) {
         this.internalActive = !this.internalActive;
         this.$emit("toggle", this.internalActive);
