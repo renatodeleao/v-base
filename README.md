@@ -158,4 +158,4 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 - Credits to headless ui frameworks like radix.ui or headless.ui for setting strong foundations on library "form"
 - Credits Vue for being awesome.
 ## License
-©2020-present [MIT](lib/LICENSE)
+©2020-present [MIT](LICENSE)
