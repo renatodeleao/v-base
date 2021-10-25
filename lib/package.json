@@ -1,6 +1,6 @@
 {
   "name": "v-eye",
-  "version": "0.1.0",
+  "version": "0.1.1-alpha.0",
   "main": "dist/v-eye.umd.js",
   "browser": "dist/v-eye.common.js",
   "jsdelivr": "dist/v-eye.umd.min.js",
