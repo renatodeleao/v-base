@@ -1,6 +1,12 @@
 {
   "name": "v-eye",
   "version": "0.1.2-alpha.0",
+  "license": "MIT",
+  "repository": "https://github.com/renatodeleao/v-eye",
+  "author": {
+    "name": "Renato de Leão",
+    "url": "https://github.com/renatodeleao/"
+  },
   "main": "dist/v-eye.umd.js",
   "browser": "dist/v-eye.common.js",
   "jsdelivr": "dist/v-eye.umd.min.js",
