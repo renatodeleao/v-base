@@ -16,7 +16,7 @@ export default {
   props: {
     as: {
       type: String,
-      default: "template"
+      default: "div"
     },
     /**
      * when used inside a pack, you better use this
