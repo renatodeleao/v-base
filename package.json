@@ -6,7 +6,9 @@
     "lerna": "^3.22.1"
   },
   "scripts": {
-    "build:lib": "yarn workspace v-eye build",
+    "lib:preflight": "yarn lib:build && git add . && git commit -m \"chore: build\"",
+    "lib:publish": "yarn lib:preflight && lerna publish",
+    "lib:build": "yarn workspace v-eye build",
     "dev:lib": "yarn workspace v-eye dev",
     "lib:lint": "yarn workspace v-eye lint",
     "dev:playground": "yarn workspace playground serve",
