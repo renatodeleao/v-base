@@ -6,6 +6,7 @@
     "lerna": "^3.22.1"
   },
   "scripts": {
+    "build:lib": "yarn workspace v-eye build",
     "dev:lib": "yarn workspace v-eye dev",
     "lib:lint": "yarn workspace v-eye lint",
     "dev:playground": "yarn workspace playground serve",
