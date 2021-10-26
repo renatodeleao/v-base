@@ -22,7 +22,7 @@ export default {
   props: {
     as: {
       type: String,
-      default: "template"
+      default: "div"
     },
     /**
      * The controlled active state of the eyes.
