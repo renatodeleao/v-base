@@ -89,7 +89,7 @@ export default {
   computed: {
     $_modelValueProxy: {
       get() {
-        return this.active
+        return this.active || this.active === 0
           ? this.serializeModelValue(this.active)
           : this.serializeModelValue(this.modelValueInternal);
       },
