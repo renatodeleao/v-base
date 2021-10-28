@@ -1,14 +1,4 @@
 <script>
-const toArrayModel = (value) => {
-  if (Array.isArray(value)) {
-    return value
-  } else if (value || value === 0) {
-    return [value]
-  } else {
-    return []
-  }
-}
-
 /**
  * Provides state for scoped <v-eye>, so they can work as group based on
  * provider conditions (props).
@@ -77,24 +67,13 @@ export default {
     watchPropsWithModelSideEffects: {
       type: Boolean,
       default: false
-    },
-    /**
-     * Removes all internal or external logic basically making this a
-     * transparent static wrapper.
-     * Still thinking about it because it seems to me that if we don't
-     * want any modeling, than the compositions should conditionally
-     * render me. But that seems more work for now.
-     * @todo think about this
-     */
-    static: {
-      type: Boolean,
-      default: false
     }
   },
 
   data() {
     return {
       injected: [],
+      injectedElMap: {},
       modelValueInternal: this.defaultActive,
       // in order for reactive props to stay reactive when provide/injected
       // because vue will create an observable
@@ -102,8 +81,7 @@ export default {
         track: this.track,
         untrack: this.untrack,
         getIsActive: this.getIsActive,
-        toggle: this.toggle,
-        static: this.static
+        toggle: this.toggle
       }
     };
   },
@@ -112,8 +90,8 @@ export default {
     $_modelValueProxy: {
       get() {
         return this.active
-          ? toArrayModel(this.active)
-          : toArrayModel(this.modelValueInternal);
+          ? this.serializeModelValue(this.active)
+          : this.serializeModelValue(this.modelValueInternal);
       },
       set(newValue) {
         this.syncModelValue(newValue);
@@ -122,8 +100,21 @@ export default {
   },
 
   watch: {
-    static(val) {
-      this.api.static = val
+    /**
+     * @see emitSideEffect notes
+     * @see syncModelValue [1]
+     */
+    active() {
+      // [1]
+      if (this._preventActiveWatcher) {
+        this._preventActiveWatcher = false;
+        return;
+      }
+
+      /**
+       * @emits change
+       */
+      this.emitSideEffect("change");
     },
     mandatory: {
       immediate: true,
@@ -145,32 +136,121 @@ export default {
     }
   },
 
+  mounted() {
+    /**
+     * @todo it's a bit confusing but at leas its clear that we have
+     *  access to dom refs for side-effects.
+     *  Also this is related with dom animation which is being discussed
+     * @example vue
+     *   <!-- ❌ works but.. does not have instance context details -->
+     *   <v-eye-manager @hook:mounted="handle" />
+     *   <!-- ✅ -->
+     *   <v-eye-manager @mounted="handle" />
+     *
+     * @emits mounted
+     */
+    this.emitSideEffect("mounted");
+  },
+
   methods: {
     syncModelValue(newVal) {
       this.modelValueInternal = newVal;
-      const emitValue = this.multiple
-        ? newVal
-        : !newVal.length
-        ? null
-        : newVal[newVal.length - 1]
 
-      this.$emit("change", emitValue);
-      this.$emit("update:modelValue", emitValue);
+      this.emitSideEffect(["change", "update:active"], newVal);
+      // [1]
+      this._preventActiveWatcher = true;
     },
+
+    /**
+     * Internally we always use arrays to simplify logic
+     * @param {String|null|Array} value - raw value provided by consumer
+     */
+    serializeModelValue(value) {
+      if (Array.isArray(value)) {
+        return value;
+      } else if (value || value === 0) {
+        return [value];
+      } else {
+        return [];
+      }
+    },
+    /**
+     * Internally we always use arrays to simplify logic
+     * but when outputting for consumers we give them the expected type for
+     * the mode: multiple => array else uid String || null (if no selection)
+     */
+    deserializeModelValue(serializedModelValue) {
+      return this.multiple
+        ? serializedModelValue
+        : !serializedModelValue.length
+        ? null
+        : serializedModelValue[serializedModelValue.length - 1];
+    },
+
+    /**
+     * When active is changed from an external source but we still want to perform
+     * side-effects on the consumer
+     * Ex: using vue-router, we can change the route without interacting with any
+     * VTab trigger (clicking). This means regular that @change won't be triggered,
+     * and thus side-effects can't be executed for that scenario when consumers need access
+     * to internal apis: we could use $refs and access all this info directly but feels
+     * even dirtier than this.
+     *
+     * @note HIGH PROBABILITY OF CHANGE
+     *   This was added to perform a specific DOM related side-effect
+     *   "the stalker underline" tab demo. But is it really much better than
+     *   $nextTick(() => this.$el.querySelector('[data-state="selected"])
+     * @note If deprecated...
+     *   the code it's still re-used on mounted() hook and that's necessary
+     *   for initial side-effects? Or could we go full $refs?
+     */
+    emitSideEffect(eventNames, modelValueOverwrite) {
+      const { emitValue, details } = this.getEventPayload(modelValueOverwrite);
+
+      if (Array.isArray(eventNames)) {
+        eventNames.forEach(event => this.$emit(event, emitValue, details));
+      } else {
+        this.$emit(eventNames, emitValue, details);
+      }
+    },
+
+    /**
+     * @typedef SideEffectDetails
+     * @property {Array} elements - array of tracked children dom nodes
+     *
+     * @returns {SideEffectDetails}
+     */
+    getSideEffectDetails(modelValueOverwrite) {
+      const value = modelValueOverwrite ?? this.$_modelValueProxy;
+
+      return {
+        elements: value.map(uid => this.injectedElMap[uid])
+      };
+    },
+
+    getEventPayload(modelValueOverwrite) {
+      return {
+        emitValue: this.deserializeModelValue(
+          modelValueOverwrite ?? this.$_modelValueProxy
+        ),
+        details: this.getSideEffectDetails(modelValueOverwrite)
+      };
+    },
+
     execMandatorySideEffects(isMandatory) {
       if (!this.watchPropsWithModelSideEffects) return;
 
       if (isMandatory && !this.$_modelValueProxy.length) {
-        this.$_modelValueProxy = [this.injected[0]]
+        this.$_modelValueProxy = [this.injected[0]];
       }
     },
     execMultipleSideEffects(isMultiple) {
       if (!this.watchPropsWithModelSideEffects) return;
 
       if (!isMultiple && this.$_modelValueProxy.length > 1) {
-        this.$_modelValueProxy = this.$_modelValueProxy.slice(-1)
+        this.$_modelValueProxy = this.$_modelValueProxy.slice(-1);
       } else {
-        this.syncModelValue(this.$_modelValueProxy)
+        this.syncModelValue(this.$_modelValueProxy);
       }
     },
 
@@ -179,10 +259,12 @@ export default {
     /**
      * Keep track of eyes created inside this provider instance. (injected)
      * @param {String|Number} uid - each eye identifier
+     * @param {HTMLElement} element - each eye dom node
      */
-    track(uid) {
+    track(uid, element) {
       if (!this.injected.includes(uid)) {
         this.injected.push(uid);
+        this.$set(this.injectedElMap, uid, element);
       }
     },
     /**
@@ -191,6 +273,7 @@ export default {
      */
     untrack(uid) {
       this.injected = this.injected.filter(curId => uid !== curId);
+      this.$delete(this.injectedElMap, uid);
 
       if (this.getIsActive(uid)) {
         this.deactivate(uid, true);
@@ -223,7 +306,7 @@ export default {
         );
       } else {
         if (destroyed && this.mandatory) {
-          this.$_modelValueProxy = this.injected.slice(-1)
+          this.$_modelValueProxy = this.injected.slice(-1);
         }
         // if multiple are open, and we were have current multiple-like state, keep it open
         // and close the other ones. this is inspired by vuetify behaviour, and since they

@@ -48,10 +48,7 @@ export default {
         : this.uid;
     },
     $_independent() {
-      return !this.manager || this.manager.static;
-    },
-    $_static() {
-      return !!this.manager?.static
+      return !this.manager;
     },
     $_active() {
       if (this.$_independent) {
@@ -68,9 +65,9 @@ export default {
     }
   },
 
-  created() {
+  mounted() {
     if (!this.$_independent) {
-      this.manager.track(this.$_uid);
+      this.manager.track(this.$_uid, this.$el);
     }
 
     if (!this.$_independent && this.active !== false) {
@@ -89,8 +86,6 @@ export default {
 
   methods: {
     toggle() {
-      if (this.$_static) return
-
       if (this.$_independent) {
         this.internalActive = !this.internalActive;
         this.$emit("toggle", this.internalActive);
@@ -103,15 +98,21 @@ export default {
   },
 
   render(h) {
+    const attrs = {
+      "data-active": this.$_active ? "" : null,
+      "data-uid": this.$_uid
+    };
+
     if (this.as === "template") {
       return this.$scopedSlots.default({
         isActive: this.$_active,
-        toggle: this.toggle
+        toggle: this.toggle,
+        attrs
       });
     } else {
       return h(
         this.as,
-        { attrs: { active: this.$_active ? "" : null } },
+        { attrs },
         this.$scopedSlots.default({
           isActive: this.$_active,
           toggle: this.toggle
