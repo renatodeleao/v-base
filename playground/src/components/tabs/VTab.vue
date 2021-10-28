@@ -3,15 +3,30 @@
     :active="selected"
     v-bind="$props"
     as="template"
-    #default="{ isActive, toggle }"
+    #default="{ isActive, toggle, attrs }"
   >
+    <router-link
+      :to="$attrs.to"
+      v-if="isRouterLink"
+      v-slot="{ href, navigate }"
+    >
+      <a
+        class="c-tab"
+        :class="isActive && 'c-tab--is-active'"
+        :href="href"
+        v-bind="{...componentAttrs, ...attrs }"
+        @click="onClick($event, navigate, toggle)"
+      >
+        <slot />
+      </a>
+    </router-link>
     <component
+      v-else
       :is="component"
       class="c-tab"
       :class="isActive && 'c-tab--is-active'"
       :aria-selected="isActive ? 'true' : null"
       v-bind="componentAttrs"
-      v-on="$listeners"
       @click="toggle"
     >
       <slot />
@@ -33,8 +48,14 @@ export default {
     selected: active
   },
   computed: {
+    isRouterLink() {
+      return !!this.$attrs.to
+    },
+    componentEvent() {
+      return this.isRouterLink ? 'click' : null
+    },
     component() {
-      if (this.$attrs.to) {
+      if (this.isRouterLink) {
         return 'router-link'
       } else if (this.$attrs.href) {
         return 'a'
@@ -52,6 +73,13 @@ export default {
       }
 
       return this.$attrs
+    }
+  },
+  methods: {
+    onClick(e, navigate, toggle) {
+      console.log('VTab:onClick')
+      navigate(e);
+      toggle()
     }
   }
 };

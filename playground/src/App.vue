@@ -1,17 +1,20 @@
 <template>
   <div id="app" class="playground-demo-section">
     <img alt="Vue logo" src="./assets/logo.png" class="mx-auto" />
-    {{ currentTab }} {{ reactiveStatic }}
-    <button @click="reactiveStatic = !reactiveStatic">reactive static</button>
-    <v-tabs as="div" id="nav" :static="reactiveStatic">
+
+    <playground-codebox>
+      curRoute: {{ routePathInitiallyMatchingLocation }}
+    </playground-codebox>
+    <input v-model="q" />
+    <v-tabs as="div" v-model="routePathInitiallyMatchingLocation">
       <v-tab
         v-for="tab in tabs"
         :key="tab.routeObject.name"
         :to="tab.routeObject"
+        :uid="tab.resolvedRoutePath"
         exact-path
-        :selected="tab.resolvedRoutePath === $route.path"
       >
-        {{ tab.label }}
+        {{ tab.label }} {{ tab.resolvedRoutePath }}
       </v-tab>
     </v-tabs>
 
@@ -29,8 +32,10 @@
 </template>
 
 <script>
+// const curRoutePath = useRoutePathInitiallyMatchingLocation()
 import { TabsDemo, DisclosureDemo, RawDemo } from './demos'
 import { VTabs, VTab } from '@/components'
+import PlaygroundCodebox from './PlaygroundCodebox'
 
 export default {
   name: "App",
@@ -39,20 +44,24 @@ export default {
     RawDemo,
     DisclosureDemo,
     VTabs,
-    VTab
+    VTab,
+    PlaygroundCodebox
   },
   data() {
     return {
-      currentTab: null,
-      reactiveStatic: true
+      q: '',
+      // prevents first reactive update, since $route.path always starts as root "/"
+      routePathInitiallyMatchingLocation: window.location.pathname
     }
   },
   watch: {
     '$route.path': {
-      immediate: true,
       handler(val) {
-        this.currentTab = val
+        this.routePathInitiallyMatchingLocation = val
       }
+    },
+    q(val) {
+      this.$router.replace({ query: { q: val }})
     }
   },
   computed: {
@@ -65,7 +74,8 @@ export default {
         }
       })
     }
-  }
+  },
+
 }
 </script>
 

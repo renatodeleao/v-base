@@ -1,8 +1,8 @@
 <template>
   <v-eye-manager
-    v-model="modelProxy"
     watch-props-with-side-effects
     v-bind="$props"
+    @change="onChange"
   >
     <div class="c-disclosure-group" aria-orientation="vertical" v-on="$attrs">
       <slot />
@@ -23,14 +23,9 @@ export default {
   props: {
     ...VEyeManager.props
   },
-  computed: {
-    modelProxy: {
-      get() {
-        return this[VEyeManager.model.prop];
-      },
-      set(val) {
-        this.$emit(VEyeManager.model.event, val);
-      }
+  methods: {
+    onChange(...args) {
+      this.$emit(VEyeManager.model.event, ...args);
     }
   }
 };

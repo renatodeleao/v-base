@@ -50,7 +50,7 @@
         </button>
       </div>
 
-      <v-disclosure-group v-model="groupModel" v-bind="groupProps">
+      <v-disclosure-group v-model="groupModel" v-bind="groupProps" @change="handle">
         <v-disclosure
           v-for="panel in visibleGroupPanels"
           :key="panel"
@@ -142,6 +142,11 @@ export default {
       return this.showGroupPanel3
         ? this.groupPanels
         : this.groupPanels.filter(p => p !== 3);
+    }
+  },
+  methods: {
+    handle(...args) {
+      console.log('VDisclosure', ...args)
     }
   }
 };

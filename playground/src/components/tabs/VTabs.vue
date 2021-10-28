@@ -1,10 +1,11 @@
 <template>
   <v-eye-manager
-    v-model="modelProxy"
     mandatory
     watch-props-with-side-effects
     :default-active="defaultSelected"
-    v-bind="$props"
+    :active="selected"
+    @change="onChange"
+    @mounted="(...args) => onChange(...args, false)"
   >
     <div
       class="c-tablist bg-green-900 bg-opacity-20"
@@ -13,6 +14,8 @@
       v-on="$attrs"
     >
       <slot />
+
+      <div class="c-tablist__selected-line" :style="selectedLineStyles" />
     </div>
   </v-eye-manager>
 </template>
@@ -40,14 +43,26 @@ export default {
     defaultSelected: defaultActive,
     selected: active
   },
-  computed: {
-    modelProxy: {
-      get() {
-        return this.selected;
-      },
-      set(val) {
-        this.$emit("selected", val);
-      }
+
+  data: () => ({
+    selectedLineStyles: {
+      width: '1px',
+      transform: 'translateX(0)'
+    }
+  }),
+
+  methods: {
+    onChange(val, details, animate) {
+      console.log('VTabs:onChange:', val, details.elements[0])
+      this.$emit("selected", val, details.elements[0]);
+      this.updateSelectedLine(details.elements[0], animate)
+    },
+    updateSelectedLine($el, forceAnim) {
+      const animate = forceAnim ?? true
+      const { width } = $el?.getBoundingClientRect() || {}
+      this.selectedLineStyles.width = width + 'px'
+      this.selectedLineStyles.transition = animate ? 'width 0.2s ease, transform 0.2s ease' : null
+      this.selectedLineStyles.transform = `translateX(${$el?.offsetLeft}px)`
     }
   }
 };
@@ -55,6 +70,18 @@ export default {
 
 <style lang="postcss">
 .c-tablist {
-  @apply flex p-1 space-x-1 rounded-xl;
+  @apply relative flex p-1 space-x-1 rounded-xl;
+}
+
+.c-tablist__selected-line {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+
+  width: 1px;
+  height: 2px;
+
+  transform-origin: 0 0;
+  background-color: white;
 }
 </style>

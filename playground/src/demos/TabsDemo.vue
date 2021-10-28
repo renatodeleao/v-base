@@ -4,7 +4,7 @@
 
     <section class="mb-8">
       <h2 class="playground-demo-section__heading">Controlled</h2>
-      <v-tabs v-model="model">
+      <v-tabs v-model="model" @selected="handleSelected">
         <v-tab v-for="tab in tabs" :key="tab" :uid="tab">
           {{ tab }}
         </v-tab>
@@ -18,7 +18,7 @@
       <h2 class="playground-demo-section__heading">
         Uncontrolled (no v-model, internal state)
       </h2>
-      <v-tabs :default-selected="tabs[1]" @selected="doSomething">
+      <v-tabs :default-selected="tabs[1]">
         <v-tab
           v-for="tab in tabs"
           :key="tab"
@@ -87,6 +87,9 @@ export default {
   methods: {
     doSomething() {
       alert(`If you're using me as menu after page load or something`);
+    },
+    handleSelected(modelVal, el) {
+      console.log('handle', modelVal, el)
     }
   }
 };
