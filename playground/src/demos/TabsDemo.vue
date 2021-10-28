@@ -14,22 +14,6 @@
       ><code>v-model: {{ model }}</code></pre>
     </section>
 
-    <section class="mb-8">
-      <h2 class="playground-demo-section__heading">
-        Uncontrolled (no v-model, internal state)
-      </h2>
-      <v-tabs :default-selected="tabs[1]">
-        <v-tab
-          v-for="tab in tabs"
-          :key="tab"
-          :uid="tab"
-          @click.native="doSomething"
-        >
-          {{ tab }}
-        </v-tab>
-      </v-tabs>
-    </section>
-
     <section>
       <h2 class="playground-demo-section__heading">Raw</h2>
       <v-eye-manager
@@ -63,6 +47,34 @@
         </v-eye>
       </v-eye-manager>
     </section>
+
+    <section class="mb-8">
+      <h2 class="playground-demo-section__heading">
+        Uncontrolled (no v-model, internal state)
+      </h2>
+      <v-tabs :default-selected="tabs[1]">
+        <v-tab
+          v-for="tab in tabs"
+          :key="tab"
+          :uid="tab"
+          @click.native="doSomething"
+        >
+          {{ tab }}
+        </v-tab>
+      </v-tabs>
+    </section>
+
+    <section class="mb-8">
+      <h2 class="playground-demo-section__heading">Controlled numeric modelk</h2>
+      <v-tabs v-model="numericModel">
+        <v-tab v-for="(tab, i) in tabs" :key="tab" :uid="i">
+          {{ tab }}
+        </v-tab>
+      </v-tabs>
+      <pre
+        class="playground-codebox mt-2"
+      ><code>v-model: {{ model }}</code></pre>
+    </section>
   </section>
 </template>
 
@@ -82,7 +94,8 @@ export default {
   },
   data: () => ({
     model: TABS[0],
-    tabs: [...TABS]
+    tabs: [...TABS],
+    numericModel: 0
   }),
   methods: {
     doSomething() {
