@@ -1,4 +1,5 @@
 <script>
+const isNil = val => val === undefined || val === null
 /**
  * Provides state for scoped <v-eye>, so they can work as group based on
  * provider conditions (props).
@@ -127,12 +128,21 @@ export default {
   },
 
   created() {
-    if (this.multiple && !Array.isArray(this.active)) {
-      console.warn("when using multiple, modelValue/v-model must be an array");
+    /* eslint-disable */
+    if (
+      this.multiple &&
+      !isNil(this.active) && !Array.isArray(this.active) &&
+      !isNil(this.defaultActive) && !Array.isArray(this.defaultActive)
+    ) {
+      console.warn(
+        "[v-eye]: when using multiple, active/defaultActive must be an array if provided"
+      );
     }
 
-    if (this.mandatory && !this.active && !this.modelValueInternal) {
-      console.warn("mandatory expects an initial modelValue");
+    if (this.mandatory && isNil(this.active) && isNil(this.defaultActive)) {
+      console.warn(
+        "[v-eye]: mandatory mode expects an not nil 'active' or 'defaultActive' value"
+      );
     }
   },
 
