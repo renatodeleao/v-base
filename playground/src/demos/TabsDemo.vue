@@ -30,7 +30,7 @@
           v-for="(tab, i) in tabs"
           :key="tab"
           :uid="tab"
-          as="template"
+          as-template
           #default="{ isActive, toggle }"
         >
           <button

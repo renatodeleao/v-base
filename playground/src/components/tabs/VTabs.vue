@@ -4,6 +4,7 @@
     watch-props-with-side-effects
     :default-active="defaultSelected"
     :active="selected"
+    as-template
     @change="onChange"
     @mounted="(...args) => onChange(...args, false)"
   >

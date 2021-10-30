@@ -2,7 +2,7 @@
   <v-eye
     :active="selected"
     v-bind="$props"
-    as="template"
+    as-template
     #default="{ isActive, toggle, attrs }"
   >
     <router-link

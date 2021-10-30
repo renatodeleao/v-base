@@ -6,7 +6,7 @@
       curRoute: {{ routePathInitiallyMatchingLocation }}
     </playground-codebox>
     <input v-model="q" />
-    <v-tabs as="div" v-model="routePathInitiallyMatchingLocation">
+    <v-tabs v-model="routePathInitiallyMatchingLocation">
       <v-tab
         v-for="tab in tabs"
         :key="tab.routeObject.name"

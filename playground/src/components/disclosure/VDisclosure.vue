@@ -2,7 +2,7 @@
   <v-eye
     v-model="modelValueProxy"
     v-bind="$props"
-    as="template"
+    as-template
     #default="{ isActive, toggle }"
   >
     <div class="c-disclosure" :open="isActive ? '' : null">

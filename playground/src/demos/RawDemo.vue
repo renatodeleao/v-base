@@ -2,9 +2,9 @@
   <section class="playground-demo-section">
     <h1 class="playground-demo-section__title">Raw Demo</h1>
 
-    <section>
+    <section class="mb-6">
       <h2 class="playground-demo-section__heading">Compound components</h2>
-      <v-eye as="div" class="c-eye" #default="{ isActive }">
+      <v-eye class="c-eye" #default="{ isActive }">
         <v-eye-switch
           class="c-eye-header"
           :class="isActive && 'rounded-b-none'"
@@ -14,6 +14,25 @@
         </v-eye-switch>
         <v-eye-content class="c-eye-content">
           Pickaboo!
+        </v-eye-content>
+      </v-eye>
+    </section>
+
+    <section class="mb-6">
+      <h2 class="playground-demo-section__heading">Compound components</h2>
+      <v-eye class="c-eye" #default="{ isActive }">
+        <v-eye-switch asTemplate #default="{ toggle }">
+          <button
+            class="c-eye-header"
+            :class="isActive && 'rounded-b-none'"
+            @click="toggle"
+          >
+            <span class="flex-1">Picka?</span>
+            <span class="flex-none">{{ isActive ? "🙉" : "🙈" }}</span>
+          </button>
+        </v-eye-switch>
+        <v-eye-content class="c-eye-content" keep-alive>
+          Kept alive: Pickaboo!
         </v-eye-content>
       </v-eye>
     </section>
