@@ -1,9 +1,8 @@
 # v-eye
 
-The `v-eye` package provides the a set of compound components to create a group of selectable items out of any component. You can see it as the baseline functionality for components like `tabs`, `button-groups`, `accordions`, `carousels` and possibily others.
+The `v-eye` package provides a set of compound components to create groups of selectable items out of any component. You can see it as the baseline functionality for components like `tabs`, `button-groups`, `accordions`, `carousels` and possibily others.
 
-In one line: it's [`Vuetify's` `v-item-group`](https://vuetifyjs.com/en/components/item-groups/) without all `vuetify` fuss attached. All props to them 🙏
-
+It's heavily inspired in [`Vuetify's` `v-item-group`](https://vuetifyjs.com/en/components/item-groups/) without all the `vuetify` wiring attached. 
 ## Installation
 
 Using a package package manager
@@ -13,7 +12,7 @@ yarn add v-eye
 ```
 
 ## Usage
-By default, all components render an un-styled root node `div`. If just to bind the logic to your own components, you can make them renderless/headless and use its `slot-scope` using `as="template"` prop, but remember that, due to Vue2 limitation, a single root node must be provided.
+By default, all components render an un-styled root node `div` with all bindings attached. If you want to bind the logic to your own custom components, use `as="template"` prop and turn them into `renderless/headless` providers and all bindings are exposed via default `slot-scope`. Remember that, due to Vue2 limitation, a single root node must be provided.
 
 ### Basic: a Disclosure component.
 Basically it's an equivalent of [`<details><summary>` native implementation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details), but state-driven.
@@ -66,7 +65,7 @@ export default {
 </script>
 
 ```
-#### what if have my on "trigger" component, like a button?
+#### Using a your own custom component
 
 Picking up on the previous example, just use the headless version via `as="template` prop.
 
@@ -88,7 +87,7 @@ Picking up on the previous example, just use the headless version via `as="templ
 ### Group Usage
 Till now, you might be wondering that every example can be easily achievable without any library. Why the heck would you want another package? 
 
-The usefulness of this package really pays off when you want for each `v-eye` to be aware of similar siblings state, for example an `accordion` where only one panel can be open at the time — clicking one panel will close the current open sibling. That's when `VEyeManager` comes handy.
+The usefulness of this package really shows off when you want each `v-eye` to be aware its siblings state. For example an `accordion`, where only one panel can be open at the time: clicking one panel should close the current open sibling. That's when `VEyeManager` comes handy.
 
 
 ```vue
@@ -144,7 +143,6 @@ This is a `0.X.Y` version this means that the api is subject to changes. Props m
 | mandatory                      | `{Boolean}` / `false`     | At least one eye must be active all the time. Good for accordions, tabs.                                                                                                                                  |
 | multiple                       | `{Boolean}` / `false`     | Allows multiple eyes to be active at the same time. Turns v-model into an array of `uid`                                                                                                                  |
 | watchPropsWithModelSideEffects | `{Boolean}` / false       | BETA — if v-model data should react immediately to prop some prop changes. Ex, a multiple instance with 2 items selected. If multiple prop changes to false, the model is updated to keep only one value. |
-| static                         | `{Boolean}` / false       | BETA - Do not manage VEyes under its scope. currently required for router-driven state, although we could do it without it.                                                                               |
 
 ### slot-scope
 All components expose two props vis `default` slot-scope:
