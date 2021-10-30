@@ -1,5 +1,5 @@
 <script>
-const isNil = val => val === undefined || val === null
+const isNil = val => val === undefined || val === null;
 /**
  * Provides state for scoped <v-eye>, so they can work as group based on
  * provider conditions (props).
@@ -102,8 +102,21 @@ export default {
 
   watch: {
     /**
-     * @see emitSideEffect notes
-     * @see syncModelValue [1]
+     * When active is changed from an external source but we still want to perform
+     * side-effects on the consumer
+     * Ex: using vue-router, we can change the route without interacting with any
+     * VTab trigger (clicking). This means regular that @change won't be triggered,
+     * and thus side-effects can't be executed for that scenario when consumers need access
+     * to internal apis: we could use $refs and access all this info directly but feels
+     * even dirtier than this.
+     *
+     * @note HIGH PROBABILITY OF CHANGE
+     *   This was added to perform a specific DOM related side-effect
+     *   "the stalker underline" tab demo. But is it really much better than
+     *   $nextTick(() => this.$el.querySelector('[data-state="selected"])?
+     *
+     * @note [1] do not re-emit if triggered from internal chang
+     *   @see syncModelValue [1]
      */
     active() {
       // [1]
@@ -115,7 +128,7 @@ export default {
       /**
        * @emits change
        */
-      this.emitSideEffect("change");
+      this.emitModelValueWithDetails(["change"]);
     },
     mandatory: {
       immediate: true,
@@ -148,9 +161,8 @@ export default {
 
   mounted() {
     /**
-     * @todo it's a bit confusing but at leas its clear that we have
-     *  access to dom refs for side-effects.
-     *  Also this is related with dom animation which is being discussed
+     * @todo it's a bit confusing but at least its clear that we have
+     *  access event details
      * @example vue
      *   <!-- ❌ works but.. does not have instance context details -->
      *   <v-eye-manager @hook:mounted="handle" />
@@ -159,14 +171,14 @@ export default {
      *
      * @emits mounted
      */
-    this.emitSideEffect("mounted");
+    this.emitModelValueWithDetails(["mounted"]);
   },
 
   methods: {
     syncModelValue(newVal) {
       this.modelValueInternal = newVal;
 
-      this.emitSideEffect(["change", "update:active"], newVal);
+      this.emitModelValueWithDetails(["change", "update:active"], newVal);
       // [1]
       this._preventActiveWatcher = true;
     },
@@ -198,52 +210,51 @@ export default {
     },
 
     /**
-     * When active is changed from an external source but we still want to perform
-     * side-effects on the consumer
-     * Ex: using vue-router, we can change the route without interacting with any
-     * VTab trigger (clicking). This means regular that @change won't be triggered,
-     * and thus side-effects can't be executed for that scenario when consumers need access
-     * to internal apis: we could use $refs and access all this info directly but feels
-     * even dirtier than this.
+     * Convenience wrapper that emits provided vue event names with most up-to
+     * date modelValue and EventDetails object for consumer side-effects.
      *
-     * @note HIGH PROBABILITY OF CHANGE
-     *   This was added to perform a specific DOM related side-effect
-     *   "the stalker underline" tab demo. But is it really much better than
-     *   $nextTick(() => this.$el.querySelector('[data-state="selected"])
-     * @note If deprecated...
-     *   the code it's still re-used on mounted() hook and that's necessary
-     *   for initial side-effects? Or could we go full $refs?
+     * @param {Array<String>} eventNames - the ones to emit with payload
+     * @param {Array} newModelValue - omitting it means using currently computed
+     *   this.$_modelValueProxy. Currently, raw active cannot be used because
+     *   it's not coerced to internal expected representation (Array)
      */
-    emitSideEffect(eventNames, modelValueOverwrite) {
-      const { emitValue, details } = this.getEventPayload(modelValueOverwrite);
+    emitModelValueWithDetails(eventNames, newModelValue) {
+      const { emitValue, details } = this.getEventParams(
+        newModelValue ?? this.$_modelValueProxy
+      );
 
-      if (Array.isArray(eventNames)) {
-        eventNames.forEach(event => this.$emit(event, emitValue, details));
-      } else {
-        this.$emit(eventNames, emitValue, details);
-      }
+      eventNames.forEach(event => this.$emit(event, emitValue, details));
     },
 
     /**
-     * @typedef SideEffectDetails
+     * Additional information for consumers to perform model change
+     * side-effects on their implementations.
+     *
+     * @typedef {Object} EventDetails
      * @property {Array} elements - array of tracked children dom nodes
      *
-     * @returns {SideEffectDetails}
+     * @param {Array} modelValue
+     * @returns {EventDetails}
      */
-    getSideEffectDetails(modelValueOverwrite) {
-      const value = modelValueOverwrite ?? this.$_modelValueProxy;
-
+    getEventDetails(modelValue) {
       return {
-        elements: value.map(uid => this.injectedElMap[uid])
+        elements: modelValue.map(uid => this.injectedElMap[uid])
       };
     },
 
-    getEventPayload(modelValueOverwrite) {
+    /**
+     * Proxy to get all event emit information in a single call
+     *
+     * @typedef {Object} EventParams
+     * @property {Array|String|Number|null} emitValue
+     * @property {EventDetails} details
+     *
+     * @returns {EventParams}
+     */
+    getEventParams(modelValue) {
       return {
-        emitValue: this.deserializeModelValue(
-          modelValueOverwrite ?? this.$_modelValueProxy
-        ),
-        details: this.getSideEffectDetails(modelValueOverwrite)
+        emitValue: this.deserializeModelValue(modelValue),
+        details: this.getEventDetails(modelValue)
       };
     },
 
