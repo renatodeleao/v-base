@@ -1,6 +1,6 @@
 <script>
 /**
- * Opens and closes, revealing its content.
+ * An individual switch that can work within a team when managed.
  */
 export default {
   name: "VEye",
@@ -19,9 +19,10 @@ export default {
       default: "div"
     },
     /**
-     * when used inside a pack, you better use this
-     * to know who is who in the v-model, otherwise
-     * you'll get vue's uid
+     * When used under manager scope, it's highly recommended to provide unique
+     * value to each instance as it will act as v-model's value when active.
+     * Omitting will get random generated value, which is not very useful,
+     * but necessary for internal tracking logic.
      */
     uid: {
       type: [String, Number],
