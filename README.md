@@ -16,5 +16,14 @@ Pull requests are welcome. For major changes, please open an issue first to disc
 - Credits to `Vuetify` for the idea
 - Credits to headless ui frameworks like radix.ui or headless.ui for setting strong foundations on library "form"
 - Built with `vue-cli` and its friends.
+
+## Special thanks
+
+<a href="https://gleam.io/" target="_blank">
+  <img width="250px" src="https://js.gleam.io/webpack/assets.images.content.logo--dark.62a0ca87aaa3a825c786e326326e26b9.svg" alt="gleam logo symbol">
+</a>
+
+For sponsoring the bootstrap of this project!
+
 ## License
 ©2020-present [MIT](LICENSE)
