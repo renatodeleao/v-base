@@ -12,7 +12,7 @@
 </template>
 
 <script>
-import { VPrimitive, asTemplate } from './VPrimitive'
+import { VPrimitive, asTemplate } from "./VPrimitive";
 
 export default {
   name: "VEyeSwitch",

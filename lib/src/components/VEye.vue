@@ -2,7 +2,7 @@
 /**
  * An individual switch that can work within a team when managed.
  */
-import { VPrimitive, asTemplate } from './VPrimitive'
+import { VPrimitive, asTemplate } from "./VPrimitive";
 
 export default {
   name: "VEye",
@@ -65,7 +65,7 @@ export default {
       return {
         isActive: this.$_active,
         toggle: this.toggle
-      }
+      };
     }
   },
 

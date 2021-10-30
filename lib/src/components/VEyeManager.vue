@@ -1,5 +1,5 @@
 <script>
-import { VPrimitive, asTemplate } from './VPrimitive'
+import { VPrimitive, asTemplate } from "./VPrimitive";
 
 const isNil = val => val === undefined || val === null;
 /**
