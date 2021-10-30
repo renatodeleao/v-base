@@ -2,6 +2,8 @@
 /**
  * An individual switch that can work within a team when managed.
  */
+import { VPrimitive, asTemplate } from './VPrimitive'
+
 export default {
   name: "VEye",
   inject: {
@@ -14,10 +16,7 @@ export default {
     event: "toggle"
   },
   props: {
-    as: {
-      type: String,
-      default: "div"
-    },
+    asTemplate,
     /**
      * When used under manager scope, it's highly recommended to provide unique
      * value to each instance as it will act as v-model's value when active.
@@ -57,6 +56,16 @@ export default {
       }
 
       return this.manager.getIsActive(this.$_uid);
+    },
+
+    /**
+     * Provided via slot-scope or injection
+     */
+    api() {
+      return {
+        isActive: this.$_active,
+        toggle: this.toggle
+      }
     }
   },
 
@@ -104,22 +113,14 @@ export default {
       "data-uid": this.$_uid
     };
 
-    if (this.as === "template") {
-      return this.$scopedSlots.default({
-        isActive: this.$_active,
-        toggle: this.toggle,
+    return h(
+      VPrimitive,
+      { props: { asTemplate: this.asTemplate } },
+      this.$scopedSlots.default({
+        ...this.api,
         attrs
-      });
-    } else {
-      return h(
-        this.as,
-        { attrs },
-        this.$scopedSlots.default({
-          isActive: this.$_active,
-          toggle: this.toggle
-        })
-      );
-    }
+      })
+    );
   },
 
   provide() {

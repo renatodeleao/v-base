@@ -1,4 +1,6 @@
 <script>
+import { VPrimitive, asTemplate } from './VPrimitive'
+
 const isNil = val => val === undefined || val === null;
 /**
  * Provides state for scoped <v-eye>, so they can work as group based on
@@ -11,10 +13,7 @@ export default {
     event: "change"
   },
   props: {
-    as: {
-      type: String,
-      default: "div"
-    },
+    asTemplate,
     /**
      * The controlled active state of the eyes.
      * Must be used in conjunction with v-model, manually with @change event
@@ -357,10 +356,7 @@ export default {
   },
 
   render(h) {
-    // mostly because of jest, other wise would be regular slot
-    return this.as === "template"
-      ? this.$scopedSlots.default({})
-      : h(this.as, this.$slots.default);
+    return h(VPrimitive, { props: { asTemplate: this.asTemplate } }, this.$slots.default)
   },
 
   provide() {

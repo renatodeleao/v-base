@@ -1,34 +1,25 @@
+<template>
+  <v-primitive
+    v-bind="{
+      asTemplate,
+      tagName: 'button',
+      type: 'button'
+    }"
+    @click="eye.api.toggle"
+  >
+    <slot v-bind="eye.api" />
+  </v-primitive>
+</template>
+
 <script>
+import { VPrimitive, asTemplate } from './VPrimitive'
+
 export default {
   name: "VEyeSwitch",
+  components: { VPrimitive },
   inject: ["eye"],
   props: {
-    as: {
-      type: String,
-      default: "button"
-    }
-  },
-  render(h) {
-    if (this.as === "template") {
-      return this.$scopedSlots.default({
-        toggle: this.eye?.toggle,
-        isActive: this.eye?.$_active
-      });
-    } else {
-      return h(
-        this.as,
-        {
-          attrs: {
-            type: "button"
-          },
-          on: {
-            click: this.eye?.toggle
-          }
-        },
-        this.$slots.default ||
-          this.$scopedSlots.default({ isActive: this.eye?.$_active })
-      );
-    }
+    asTemplate
   }
 };
 </script>

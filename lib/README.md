@@ -12,7 +12,7 @@ yarn add v-eye
 ```
 
 ## Usage
-By default, all components render an un-styled root node `div` with all bindings attached. If you want to bind the logic to your own custom components, use `as="template"` prop and turn them into `renderless/headless` providers and all bindings are exposed via default `slot-scope`. Remember that, due to Vue2 limitation, a single root node must be provided.
+By default, all components render an un-styled root node `div` with all bindings attached. If you want to bind the logic to your own custom components, use `as-template` prop and turn them into `renderless/headless` providers and all bindings are exposed via default `slot-scope`. Remember that, due to Vue2 limitation, a single root node must be provided.
 
 ### Basic: a Disclosure component.
 Basically it's an equivalent of [`<details><summary>` native implementation](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/details), but state-driven.
@@ -74,7 +74,7 @@ Picking up on the previous example, just use the headless version via `as="templ
 <template>
   <div class="your-app-input">
     <input :type="inputType">
-    <v-eye v-model="isPasswordVisible" as="template" #default="{ toggle }">
+    <v-eye v-model="isPasswordVisible" as-template #default="{ toggle }">
       <your-app-button
         :icon="isPasswordVisible ? '🙈 ': '🙉' " 
         @click="toggle"
