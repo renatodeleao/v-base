@@ -3,6 +3,8 @@
  * An individual switch that can work within a team when managed.
  */
 import { VPrimitive, asTemplate } from "./VPrimitive";
+import { useSlots } from "../utils";
+import { h } from "vue";
 
 export default {
   name: "VEye",
@@ -107,16 +109,17 @@ export default {
     }
   },
 
-  render(h) {
+  render() {
     const attrs = {
       "data-active": this.$_active ? "" : null,
       "data-uid": this.$_uid
     };
+    const $slots = useSlots(this);
 
     return h(
       VPrimitive,
       { props: { asTemplate: this.asTemplate } },
-      this.$scopedSlots.default({
+      $slots.default({
         ...this.api,
         attrs
       })
