@@ -114,10 +114,13 @@ export default {
       "data-uid": this.$_uid
     };
     const $slots = useSlots(this);
+    const props = { asTemplate: this.asTemplate };
 
     return h(
       VPrimitive,
-      { props: { asTemplate: this.asTemplate } },
+      {
+        ...(isVue3 ? props : { props })
+      },
       $slots.default({
         ...this.api,
         attrs
