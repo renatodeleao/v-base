@@ -3,7 +3,7 @@
  * An individual switch that can work within a team when managed.
  */
 import { VPrimitive, asTemplate } from "./VPrimitive";
-import { useSlots } from "../utils";
+import { useSlots, uniqueId } from "../utils";
 import { h } from "vue";
 
 export default {
@@ -42,11 +42,10 @@ export default {
       internalActive: this.active
     };
   },
-
   computed: {
     $_uid() {
       return this.uid === null || this.uid === undefined
-        ? `v-eye-${this._uid}`
+        ? uniqueId()
         : this.uid;
     },
     $_independent() {
