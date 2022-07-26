@@ -7,11 +7,11 @@
     "build": "npm run use-vue:2 && vue-cli-service build",
     "test:unit": "npm run use-vue:2 && vue-cli-service test:unit",
     "lint": "npm run use-vue:2 && vue-cli-service lint",
-    "use-vue:2.7": "node ../scripts/swap-vue.js 2"
+    "use-vue:2": "node ../scripts/swap-vue.js 2"
   },
   "dependencies": {
     "core-js": "^3.6.5",
-    "v-eye": "1.0.0",
+    "v-eye": "*",
     "vue": "^2.6.11",
     "vue-router": "^3.2.0"
   },
