@@ -10,6 +10,7 @@ const isNil = val => val === undefined || val === null;
  */
 export default {
   name: "VEyeManager",
+  emits: ["change", "update:active", "mounted"],
   model: {
     prop: "active",
     event: "change"

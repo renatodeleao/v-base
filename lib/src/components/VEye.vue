@@ -3,7 +3,7 @@
  * An individual switch that can work within a team when managed.
  */
 import { VPrimitive, asTemplate } from "./VPrimitive";
-import { useSlots, uniqueId } from "../utils";
+import { useSlots, uniqueId, isVue3 } from "../utils";
 import { h } from "vue";
 
 export default {
@@ -13,6 +13,7 @@ export default {
       default: null
     }
   },
+  emits: ["toggle", "update:active"],
   model: {
     prop: "active",
     event: "toggle"
