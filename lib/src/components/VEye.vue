@@ -3,6 +3,8 @@
  * An individual switch that can work within a team when managed.
  */
 import { VPrimitive, asTemplate } from "./VPrimitive";
+import { useSlots, uniqueId, isVue3 } from "../utils";
+import { h } from "vue";
 
 export default {
   name: "VEye",
@@ -11,6 +13,7 @@ export default {
       default: null
     }
   },
+  emits: ["toggle", "update:active"],
   model: {
     prop: "active",
     event: "toggle"
@@ -40,11 +43,10 @@ export default {
       internalActive: this.active
     };
   },
-
   computed: {
     $_uid() {
       return this.uid === null || this.uid === undefined
-        ? `v-eye-${this._uid}`
+        ? uniqueId()
         : this.uid;
     },
     $_independent() {
@@ -107,19 +109,21 @@ export default {
     }
   },
 
-  render(h) {
+  render() {
     const attrs = {
       "data-active": this.$_active ? "" : null,
       "data-uid": this.$_uid
     };
+    const $slots = useSlots(this);
+    const renderSlots = () => $slots.default({ ...this.api, attrs });
+    const props = { asTemplate: this.asTemplate };
 
     return h(
       VPrimitive,
-      { props: { asTemplate: this.asTemplate } },
-      this.$scopedSlots.default({
-        ...this.api,
-        attrs
-      })
+      {
+        ...(isVue3 ? props : { props })
+      },
+      isVue3 ? () => renderSlots() : renderSlots()
     );
   },
 

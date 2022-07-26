@@ -1,5 +1,7 @@
 <script>
 import { VPrimitive, asTemplate } from "./VPrimitive";
+import { useSlots, isVue3 } from "../utils.js";
+import { h } from "vue";
 
 const isNil = val => val === undefined || val === null;
 /**
@@ -8,6 +10,7 @@ const isNil = val => val === undefined || val === null;
  */
 export default {
   name: "VEyeManager",
+  emits: ["change", "update:active", "mounted"],
   model: {
     prop: "active",
     event: "change"
@@ -284,7 +287,11 @@ export default {
     track(uid, element) {
       if (!this.injected.includes(uid)) {
         this.injected.push(uid);
-        this.$set(this.injectedElMap, uid, element);
+        if (isVue3) {
+          this.injectedElMap[uid] = element
+        } else {
+          this.$set(this.injectedElMap, uid, element);
+        }
       }
     },
     /**
@@ -293,7 +300,11 @@ export default {
      */
     untrack(uid) {
       this.injected = this.injected.filter(curId => uid !== curId);
-      this.$delete(this.injectedElMap, uid);
+      if (isVue3) {
+        delete this.injectedElMap[uid]
+      } else {
+        this.$delete(this.injectedElMap, uid);
+      }
 
       if (this.getIsActive(uid)) {
         this.deactivate(uid, true);
@@ -355,8 +366,18 @@ export default {
     }
   },
 
-  render(h) {
-    return h(VPrimitive, { props: { asTemplate: this.asTemplate } }, this.$slots.default)
+  render() {
+    const $slots = useSlots(this)
+    const renderSlots = () => $slots.default()
+    const props = { asTemplate: this.asTemplate }
+
+    return h(
+      VPrimitive,
+      {
+      ...(isVue3 ? props : { props })
+      },
+      isVue3 ? () => renderSlots() : $slots.default()
+    )
   },
 
   provide() {

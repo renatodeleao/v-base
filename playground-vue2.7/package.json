@@ -1,0 +1,21 @@
+{
+  "name": "playground-vue2.7",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run use-vue:2.7 && vite",
+    "build": "npm run use-vue:2.7 && vite build",
+    "preview": "npm run use-vue:2.7 &&  vite preview",
+    "use-vue:2.7": "node ../scripts/swap-vue.js 2.7"
+  },
+  "dependencies": {
+    "vue2.7": "npm:vue@2.7.8",
+    "v-eye": "*"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue2": "^1.1.2",
+    "vite": "^3.0.0",
+    "vite-plugin-commonjs": "^0.5.2"
+  }
+}
