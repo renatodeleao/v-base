@@ -16,6 +16,7 @@
   },
   "workspaces": [
     "playground",
+    "playground-vue2.7",
     "playground-vue3",
     "lib"
   ]

@@ -2,6 +2,7 @@
   "packages": [
     "lib",
     "playground",
+    "playground-vue2.7",
     "playground-vue3"
   ],
   "version": "independent",
