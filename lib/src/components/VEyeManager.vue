@@ -368,11 +368,16 @@ export default {
 
   render() {
     const $slots = useSlots(this)
+    const renderSlots = () => $slots.default()
     const props = { asTemplate: this.asTemplate }
 
-    return h(VPrimitive, {
+    return h(
+      VPrimitive,
+      {
       ...(isVue3 ? props : { props })
-      }, $slots.default())
+      },
+      isVue3 ? () => renderSlots() : $slots.default()
+    )
   },
 
   provide() {

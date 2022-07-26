@@ -115,6 +115,7 @@ export default {
       "data-uid": this.$_uid
     };
     const $slots = useSlots(this);
+    const renderSlots = () => $slots.default({ ...this.api, attrs });
     const props = { asTemplate: this.asTemplate };
 
     return h(
@@ -122,10 +123,7 @@ export default {
       {
         ...(isVue3 ? props : { props })
       },
-      $slots.default({
-        ...this.api,
-        attrs
-      })
+      isVue3 ? () => renderSlots() : renderSlots()
     );
   },
 
