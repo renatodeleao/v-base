@@ -1,0 +1,21 @@
+{
+  "name": "playground-vue3",
+  "private": true,
+  "version": "0.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "npm run use-vue:3 && vite",
+    "build": "npm run use-vue:3 && vite build",
+    "preview": "npm run use-vue:3 && vite preview",
+    "use-vue:3": "node ../scripts/swap-vue.js 3"
+  },
+  "dependencies": {
+    "v-eye": "*",
+    "vue3": "npm:vue@^3.2.37"
+  },
+  "devDependencies": {
+    "@vitejs/plugin-vue": "^3.0.0",
+    "vite": "^3.0.0",
+    "vite-plugin-commonjs": "^0.5.2"
+  }
+}

@@ -1,7 +1,8 @@
 {
   "packages": [
     "lib",
-    "playground"
+    "playground",
+    "playground-vue3"
   ],
   "version": "independent",
   "npmClient": "yarn",
