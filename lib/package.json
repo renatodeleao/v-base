@@ -16,13 +16,14 @@
     "src"
   ],
   "scripts": {
-    "dev": "vue-cli-service build --watch --target lib --name v-eye ./src/main.js",
-    "build": "vue-cli-service build --modern --target lib --name v-eye ./src/main.js",
-    "report": "vue-cli-service build --report --target lib --name v-eye ./src/main.js",
-    "test:unit": "vue-cli-service test:unit",
-    "lint": "vue-cli-service lint --fix",
-    "preflight": "yarn test:unit && yarn build",
-    "pack": "yarn pack"
+    "dev": "npm run use-vue:2 && vue-cli-service build --watch --target lib --name v-eye ./src/main.js",
+    "build": "npm run use-vue:2 && vue-cli-service build --modern --target lib --name v-eye ./src/main.js",
+    "report": "npm run use-vue:2 && vue-cli-service build --report --target lib --name v-eye ./src/main.js",
+    "test:unit": "npm run use-vue:2 && vue-cli-service test:unit",
+    "lint": "npm run use-vue:2 && vue-cli-service lint --fix",
+    "preflight": "npm run use-vue:2 && yarn test:unit && yarn build",
+    "pack": "npm run use-vue:2 && yarn pack",
+    "use-vue:2": "node ../scripts/swap-vue.js 2"
   },
   "devDependencies": {
     "@vue/cli-plugin-babel": "~4.5.0",
