@@ -11,6 +11,7 @@
   "browser": "dist/v-eye.common.js",
   "jsdelivr": "dist/v-eye.umd.min.js",
   "unpkg": "dist/v-eye.umd.min.js",
+  "module": "src/main.js",
   "files": [
     "dist",
     "src"
