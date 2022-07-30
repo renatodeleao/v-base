@@ -10,9 +10,9 @@
     "use-vue:3": "node ../scripts/swap-vue.js 3"
   },
   "dependencies": {
+    "@vue/compat": "^3.2.37",
     "v-eye": "*",
-    "vue3": "npm:vue@^3.2.37",
-    "@vue/compat": "^3.2.37"
+    "vue3": "npm:vue@^3.2.37"
   },
   "devDependencies": {
     "@vitejs/plugin-vue": "^3.0.0",
