@@ -3,7 +3,8 @@
     "lib",
     "playground",
     "playground-vue2.7",
-    "playground-vue3"
+    "playground-vue3",
+    "playground-vue3-migration-build"
   ],
   "version": "independent",
   "npmClient": "yarn",
