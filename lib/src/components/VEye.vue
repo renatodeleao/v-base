@@ -7,6 +7,9 @@ import { useSlots, uniqueId, isVue3 } from "../utils";
 import { h } from "vue";
 
 export default {
+  compatConfig: {
+    MODE: 3 // opt-in to Vue 3 if in compat mode
+  },
   name: "VEye",
   inject: {
     manager: {

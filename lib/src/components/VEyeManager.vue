@@ -9,6 +9,9 @@ const isNil = val => val === undefined || val === null;
  * provider conditions (props).
  */
 export default {
+  compatConfig: {
+    MODE: 3 // opt-in to Vue 3 if in compat mode
+  },
   name: "VEyeManager",
   emits: ["change", "update:active", "mounted"],
   model: {

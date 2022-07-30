@@ -15,6 +15,9 @@
 import { VPrimitive, asTemplate } from "./VPrimitive";
 
 export default {
+  compatConfig: {
+    MODE: 3 // opt-in to Vue 3 if in compat mode
+  },
   name: "VEyeSwitch",
   components: { VPrimitive },
   inject: ["eye"],
