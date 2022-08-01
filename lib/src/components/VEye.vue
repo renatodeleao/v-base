@@ -3,7 +3,7 @@
  * An individual switch that can work within a team when managed.
  */
 import { VPrimitive, asTemplate } from "./VPrimitive";
-import { useSlots, uniqueId, isVue3 } from "../utils";
+import { useSlots, uniqueId, isVue3, lifecyleHooksMap } from "../utils";
 import { h } from "vue";
 
 export default {
@@ -93,7 +93,7 @@ export default {
     }
   },
 
-  beforeDestroy() {
+  [lifecyleHooksMap.beforeUnmount]() {
     if (!this.$_independent) {
       this.manager.untrack(this.$_uid);
     }
