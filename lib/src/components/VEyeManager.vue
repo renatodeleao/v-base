@@ -290,10 +290,10 @@ export default {
     track(uid, element) {
       if (!this.injected.includes(uid)) {
         this.injected.push(uid);
-        if (isVue3) {
-          this.injectedElMap[uid] = element
-        } else {
-          this.$set(this.injectedElMap, uid, element);
+
+        this.injectedElMap = {
+          ...this.injectedElMap,
+          [uid]: element
         }
       }
     },
@@ -303,11 +303,9 @@ export default {
      */
     untrack(uid) {
       this.injected = this.injected.filter(curId => uid !== curId);
-      if (isVue3) {
-        delete this.injectedElMap[uid]
-      } else {
-        this.$delete(this.injectedElMap, uid);
-      }
+      const { [uid]: deleted, ...rest } = this.injectedElMap
+
+      this.injectedElMap = rest
 
       if (this.getIsActive(uid)) {
         this.deactivate(uid, true);
