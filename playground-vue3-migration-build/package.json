@@ -11,7 +11,9 @@
   },
   "dependencies": {
     "@vue/compat": "^3.2.37",
+    "lodash-es": "^4.17.21",
     "v-eye": "*",
+    "vue-router": "^4.1.3",
     "vue3": "npm:vue@^3.2.37"
   },
   "devDependencies": {

@@ -21,5 +21,9 @@ export default defineConfig({
     alias: {
       vue: '@vue/compat'
     }
+  },
+  // ...
+  define: {
+    'process.env': process.env
   }
 })

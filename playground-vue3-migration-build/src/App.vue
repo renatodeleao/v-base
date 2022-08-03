@@ -2,10 +2,10 @@
 import { ref } from 'vue'
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
-import HelloWorld from './components/HelloWorld.vue'
 import { VEyeManager, VEye, VEyeContent, VEyeSwitch } from 'v-eye'
+import { VTabs, VTab } from './components/v-tabs'
 
-let active = ref(2)
+const active = ref(1)
 </script>
 
 <template>
@@ -18,7 +18,7 @@ let active = ref(2)
     </a>
   </div>
 
-  <v-eye-manager v-model="active" :default-active="2" :multiple="false" :mandatory="true">
+  <v-eye-manager v-model:active="active" :multiple="false" :mandatory="true">
     <v-eye :uid="1">
       <v-eye-switch>Summary toggler</v-eye-switch>
       <v-eye-content>Details</v-eye-content>
@@ -29,7 +29,30 @@ let active = ref(2)
     </v-eye>
   </v-eye-manager>
 
-  <HelloWorld msg="Vite + Vue" />
+  <v-tabs default-selected="/">
+    <v-tab
+      v-for="(tab, index) in ['/', '/about', '/another']"
+      :key="index"
+      :to="tab"
+      :value="tab"
+    >
+      {{ tab }}
+    </v-tab>
+  </v-tabs>`
+
+  {{ active }}
+  <v-tabs v-model:selected="active">
+    <v-tab
+      v-for="(tab, index) in ['one', 'two']"
+      :key="index"
+      :value="index + 1"
+    >
+      {{ tab }}
+    </v-tab>
+  </v-tabs>`
+
+
+  <router-view />
 </template>
 
 <style scoped>
