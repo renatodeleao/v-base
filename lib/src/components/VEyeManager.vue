@@ -237,7 +237,8 @@ export default {
      *
      * @typedef {Object} EventDetails
      * @property {Array} elements - array of tracked children dom nodes
-     *
+     * @todo When using with router the defaultActive must match first route, so it's
+     * mandatory to pass uid also matching that default value.
      * @param {Array} modelValue
      * @returns {EventDetails}
      */
