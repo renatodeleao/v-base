@@ -4,7 +4,7 @@
  */
 import { VPrimitive, asTemplate } from "./VPrimitive";
 import { useSlots, uniqueId, isVue3, lifecyleHooksMap } from "../utils";
-import { h } from "vue";
+import { h, ref } from "vue";
 
 export default {
   compatConfig: {
@@ -41,9 +41,13 @@ export default {
       default: false
     }
   },
-  data() {
+  setup(props) {
+    const elementRef = ref(null);
+    const internalActive = ref(props.active);
+
     return {
-      internalActive: this.active
+      elementRef,
+      internalActive
     };
   },
   computed: {
@@ -69,7 +73,8 @@ export default {
     api() {
       return {
         isActive: this.$_active,
-        toggle: this.toggle
+        toggle: this.toggle,
+        setElementRef: this.setElementRef
       };
     }
   },
@@ -82,7 +87,7 @@ export default {
 
   mounted() {
     if (!this.$_independent) {
-      this.manager.track(this.$_uid, this.$el);
+      this.manager.track(this.$_uid, this.setElementRef());
     }
 
     if (!this.$_independent && this.active !== false) {
@@ -100,6 +105,23 @@ export default {
   },
 
   methods: {
+    // improvement: prefer template ref based approach instead.
+    setElementRef(el) {
+      // this function can be destructured from slot  set as :ref="setElementRef"
+      if (el) {
+        this.elementRef = el;
+      } else {
+        // good old query select if consumer bounded attrs, magical but
+        // not very certain this.$el.nextElementSibling as fallback, not
+        // that we can't control how many nodes the consumer renders under slot scope
+        // but we can suggest in docs
+        el = document.querySelector(`[data-v-eye-uid="${this.$_uid}]`);
+        this.elementRef =
+          el ?? (isVue3 ? this.$el.nextElementSibling : this.$el);
+      }
+
+      return this.elementRef;
+    },
     toggle() {
       if (this.$_independent) {
         this.internalActive = !this.internalActive;
@@ -114,8 +136,8 @@ export default {
 
   render() {
     const attrs = {
-      "data-active": this.$_active ? "" : null,
-      "data-uid": this.$_uid
+      "data-v-eye-active": this.$_active ? "" : null,
+      "data-v-eye-uid": this.$_uid
     };
     const $slots = useSlots(this);
     const renderSlots = () => $slots.default({ ...this.api, attrs });
