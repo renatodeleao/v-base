@@ -16,7 +16,9 @@ import { VPrimitive, asTemplate } from "./VPrimitive";
 
 export default {
   compatConfig: {
-    MODE: 3 // opt-in to Vue 3 if in compat mode
+    MODE: 3, // opt-in to Vue 3 if in compat mode
+    RENDER_FUNCTION: false,
+    INSTANCE_SCOPED_SLOTS: false
   },
   name: "VEyeSwitch",
   components: { VPrimitive },

@@ -7,8 +7,11 @@ import { useSlots, uniqueId, isVue3, lifecyleHooksMap } from "../utils";
 import { h, ref } from "vue";
 
 export default {
+  // opt-in to Vue 3 if in compat mode
   compatConfig: {
-    MODE: 3 // opt-in to Vue 3 if in compat mode
+    MODE: 3,
+    RENDER_FUNCTION: false,
+    INSTANCE_SCOPED_SLOTS: false
   },
   name: "VEye",
   inject: {
