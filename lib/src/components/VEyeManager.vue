@@ -380,7 +380,7 @@ export default {
       {
       ...(isVue3 ? props : { props })
       },
-      $slots.default()
+      isVue3 ? () => $slots.default() : $slots.default()
     )
   },
 

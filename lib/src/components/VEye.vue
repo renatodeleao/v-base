@@ -154,7 +154,7 @@ export default {
       {
         ...(isVue3 ? props : { props })
       },
-      $slots.default(this.api)
+      isVue3 ? () => $slots.default(this.api) : $slots.default(this.api)
     );
   },
 
