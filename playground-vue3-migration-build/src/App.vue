@@ -4,11 +4,27 @@ import { ref } from 'vue'
 // Check out https://vuejs.org/api/sfc-script-setup.html#script-setup
 import { VEyeManager, VEye, VEyeContent, VEyeSwitch } from 'v-eye'
 import { VTabs, VTab } from './components/v-tabs'
+import AppButton from './components/AppButton.vue'
 
 const active = ref(1)
+
+function test(e) {
+  window.alert(e.target.id)
+}
 </script>
 
 <template>
+  <AppButton id="one" data-xyz="42" @click="test">
+    Normal Button
+  </AppButton>
+
+  <AppButton id="two" data-xyz="42" @click="test">
+    <template #icon="{ foo }">
+      <i>icon {{ foo }}</i>
+    </template>
+    Normal Button
+  </AppButton>
+
   <div>
     <a href="https://vitejs.dev" target="_blank">
       <img src="/vite.svg" class="logo" alt="Vite logo" />
