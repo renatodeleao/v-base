@@ -67,6 +67,13 @@ export default {
       return this.manager.getIsActive(this.$_uid);
     },
 
+    $_attrs() {
+      return {
+        "data-v-eye-active": this.$_active ? "" : null,
+        "data-v-eye-uid": this.$_uid
+      };
+    },
+
     /**
      * Provided via slot-scope or injection
      */
@@ -74,7 +81,8 @@ export default {
       return {
         isActive: this.$_active,
         toggle: this.toggle,
-        setElementRef: this.setElementRef
+        setElementRef: this.setElementRef,
+        attrs: this.$_attrs
       };
     }
   },
@@ -135,12 +143,7 @@ export default {
   },
 
   render() {
-    const attrs = {
-      "data-v-eye-active": this.$_active ? "" : null,
-      "data-v-eye-uid": this.$_uid
-    };
     const $slots = useSlots(this);
-    const renderSlots = () => $slots.default({ ...this.api, attrs });
     const props = { asTemplate: this.asTemplate };
 
     return h(
@@ -148,7 +151,7 @@ export default {
       {
         ...(isVue3 ? props : { props })
       },
-      isVue3 ? () => renderSlots() : renderSlots()
+      $slots.default(this.api)
     );
   },
 
